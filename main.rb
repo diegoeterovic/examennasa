@@ -4,14 +4,14 @@ require "openssl"
 require "json"
 
 def top_page()
-    puts    "<html>"
-    puts    "   <head>"
-    puts    "   </head>"
-    puts    "   <body>"
-    puts    "       <ul>"
+    "<html>
+       <head>
+       </head>
+       <body>
+           <ul>"
 end
 
-top_page()
+
 #esto deberìa devolver el hash con los resultados / Concatenar el APIKEY en la url
 def request (addres)
     url = URI(addres) #pasarla a uri
@@ -22,34 +22,59 @@ def request (addres)
     response = http.request(request)    #
     return JSON.parse(response.read_body)   #transformado a JSON
 end
+["results"]
+data = request("https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&page=1&api_key=9ki4TX2sTe4ChgwMpGBlLbhaO1grr4hQ2aXGcMuy")
 
-data = request("https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=9ki4TX2sTe4ChgwMpGBlLbhaO1grr4hQ2aXGcMuy")
+#prueba .........
+# images = ""
 
-data["photos"].each do |item|
-    print "<li><img src='"
-    print item ["img_src"]
-    puts "'></li> "
+# data["photos"].each do |item|
+    
+#     images += "<li><img src='" + item ["img_src"] + "'></li> "
+#     return images
+# end
+#prueba .........
+
+imagesurl =[]
+
+data["photos"].each do |character|
+    avion = character ["img_src"]
+    imagesurl.push (avion)
 end
 
 
+def buttons (array)
+    buttons = ""
+    array.each do |name|
+        buttons += url = "<li><img src='#{name}'></li>"
+    end
 
+    return buttons
+    puts
+
+end
+
+my_buttons = buttons(imagesurl)
+
+
+# data["photos"].each do |item|
+#     urlphoto = item ["camera"]["id"]
+#     url = "<li><img src='#{urlphoto}'></li>"
+# puts url
+# end
 
 
 
 def botom_page()
-    puts    "       </ul>"
-    puts    "   </body>"
-    puts    "</html>"
+    "       </ul>
+        </body>
+    </html4>"
 end
 
 
-botom_page()
-
-export = top_page() + botom_page()
-
-data = File.write("./index.html", export).read
 
 
 
+index = top_page() + my_buttons + botom_page()
 
-# y esto debe ser exportado a un documento
+File.write("./index.html", index)
